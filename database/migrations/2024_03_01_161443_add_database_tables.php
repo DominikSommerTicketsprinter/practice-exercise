@@ -1,8 +1,9 @@
 <?php
 
-use Illuminate\Database\Migrations\Migration;
-use Illuminate\Database\Schema\Blueprint;
+use App\Models\Offer;
 use Illuminate\Support\Facades\Schema;
+use Illuminate\Database\Schema\Blueprint;
+use Illuminate\Database\Migrations\Migration;
 
 return new class extends Migration
 {
@@ -12,30 +13,29 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('offers', function (Blueprint $table) {
-            $table->integer('offer_id')->primary();
+            $table->integer('offer_id', true);
             $table->tinyInteger('type')->default(1);
             $table->string('title');
-            $table->string('subTitle');
+            $table->string('sub_title');
             $table->float('score')->default(10);
-            $table->text('description_1');
+            $table->text('description');
             $table->tinyInteger('active');
-            $table->date('date_activated')->nullable();
             $table->mediumInteger('views')->default(0);
             $table->smallInteger('views_month')->comment('updated via cronjob');
             $table->smallInteger('views_week')->default(0)->comment('updated via cronjob');
             $table->smallInteger('views_day')->comment('updated via trigger');
 
         });
+
+
         Schema::create('dates', function (Blueprint $table) {
-            $table->integer('date_id')->primary();
+            $table->integer('date_id', true);
             $table->integer('offer_id')->nullable();
             $table->date('period_start');
             $table->date('period_end');
             $table->smallInteger('eventlocation_id')->nullable();
             $table->time('start_time');
             $table->time('end_time');
-            $table->date('event_start');
-            $table->date('event_end');
             $table->smallInteger('eventmanager_id')->nullable();
             $table->string('discount', 5);
             $table->string('discount_code', 200);
@@ -43,7 +43,7 @@ return new class extends Migration
             $table->tinyInteger('active')->default(0);
         });
         Schema::create('offer_views', function (Blueprint $table) {
-            $table->bigInteger('offer_view_id')->primary();
+            $table->bigInteger('offer_view_id', true);
             $table->integer('offer_id')->default(0);
             $table->integer('user_id')->default(0);
             $table->dateTime('datetime')->nullable();
@@ -51,21 +51,18 @@ return new class extends Migration
 
         });
         Schema::create('eventlocations', function (Blueprint $table) {
-            $table->smallInteger('eventlocation_id')->primary();
+            $table->smallInteger('eventlocation_id', true);
             $table->string('title', 255);
             $table->string('street', 255);
             $table->string('number', 255);
             $table->string('city', 255);
             $table->double('lat');
             $table->double('lng');
-            $table->tinyInteger('multi_zip_codes')->default(0);
             $table->string('zip_code', 6);
         });
         Schema::create('eventmanagers', function (Blueprint $table) {
-            $table->smallInteger('eventmanager_id')->primary();
-            $table->string('name', 255);
+            $table->smallInteger('eventmanager_id', true);
             $table->string('formal_name', 400)->default('');
-            $table->string('logo_url', 250);
             $table->string('email', 255);
             $table->string('street', 255);
             $table->string('zip_code', 6);
